@@ -45,9 +45,9 @@ public class ClientController {
                 view.printBeginGame();
             }
             else if (Common.commandEqual(message, TicTacToeCommands.PlayerMoved)) {
-                int opponentLocation = Integer.parseInt(message
-                        .substring(TicTacToeCommands.PlayerMoved.toString().length() + 1));
-                view.printOpponentMoved(opponentLocation);
+
+                String loc = message.substring(TicTacToeCommands.PlayerMoved.toString().length() + 1);
+                view.printOpponentMoved(loc);
             }
             else if (Common.commandEqual(message, TicTacToeCommands.PrintBoard)) {
                 view.printGameBoard(message.
@@ -85,7 +85,7 @@ public class ClientController {
 
     private void inputLocation()
     {
-        int location = view.readLocation();
+        String location = view.readLocation();
         output.println(TicTacToeCommands.Move + " " + location);
     }
 

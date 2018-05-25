@@ -16,10 +16,11 @@ public interface IGameController {
     /**
      * Method allows move to location by reference player.
      * @param player Moving player reference.
-     * @param location Moving location.
+     * @param row Row to move.
+     * @param col Column to move.
      * @return True if move was allowed and finished, otherwise False.
      */
-    boolean movePlayerToLocation(IPlayer player, int location);
+    boolean movePlayerToLocation(IPlayer player, int row, int col);
 
     /**
      * Sets current game player.

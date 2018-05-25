@@ -4,7 +4,7 @@ import java.net.Socket;
 
 public class TicTacToeGame implements IGameController {
 
-    private char[] gameBoard = {'.', '.', '.', '.', '.', '.', '.', '.', '.'};
+    private char[][] gameBoard = {{'.', '.', '.'}, {'.', '.', '.'}, {'.', '.', '.'}};
 
     private IPlayer currentPlayer;
 
@@ -48,8 +48,8 @@ public class TicTacToeGame implements IGameController {
     }
 
     @Override
-    public boolean movePlayerToLocation(IPlayer player, int location) {
-        return move(player, location);
+    public boolean movePlayerToLocation(IPlayer player, int row, int col) {
+        return move(player, row, col);
     }
 
     @Override
@@ -57,65 +57,85 @@ public class TicTacToeGame implements IGameController {
         currentPlayer = player;
     }
 
-    public boolean isMoveAllowed(int location, IPlayer player) {
-        if (location < 0 || location > gameBoard.length - 1)
-            return false;
-
-        return currentPlayer == player && gameBoard[location] == '.';
+    public boolean isMoveAllowed(int row, int col, IPlayer player) {
+        if (row >= 1 && row <= 3 && col >= 1 && col <= 3) {
+            return currentPlayer == player && gameBoard[row - 1][col - 1] == '.';
+        }
+        return false;
     }
 
-    private synchronized boolean move(IPlayer player, int location) {
-        if (isMoveAllowed(location, player)) {
+    public int translateRowChar(char rowChar)
+    {
+        switch (rowChar) {
+            case 'A': return 1;
+            case 'B': return 2;
+            case 'C': return 3;
+            default: return 0;
+        }
+    }
+
+    public char translateRowInt(int rowInt)
+    {
+        switch (rowInt) {
+            case 1: return 'A';
+            case 2: return 'B';
+            case 3: return 'C';
+            default: return 0;
+        }
+    }
+
+    private synchronized boolean move(IPlayer player, int row, int col) {
+        if (isMoveAllowed(row, col, player)) {
             char playerSign =  player.toString().charAt(0);
-            gameBoard[location] = playerSign;
+            gameBoard[row - 1][col - 1] = playerSign;
 
             currentPlayer = player.getOpponent();
-            currentPlayer.opponentMoved(location);
+            currentPlayer.opponentMoved(row, col);
             return true;
         }
         return false;
     }
 
     public boolean isGameBoardFull() {
-        for (char ch : gameBoard) {
-            if (ch == '.')
-                return false;
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                if (gameBoard[row][col] == '.')
+                    return false;
+            }
         }
         return true;
     }
 
     public boolean isGameBoardContainsWinningSequence() {
 
-        return  (gameBoard[0] != '.' && gameBoard[1] == gameBoard[0] && gameBoard[2] == gameBoard[0]) ||
-                (gameBoard[0] != '.' && gameBoard[4] == gameBoard[0] && gameBoard[8] == gameBoard[0]) ||
-                (gameBoard[0] != '.' && gameBoard[3] == gameBoard[0] && gameBoard[6] == gameBoard[0]) ||
-                (gameBoard[1] != '.' && gameBoard[4] == gameBoard[1] && gameBoard[7] == gameBoard[1]) ||
-                (gameBoard[2] != '.' && gameBoard[4] == gameBoard[2] && gameBoard[6] == gameBoard[2]) ||
-                (gameBoard[2] != '.' && gameBoard[5] == gameBoard[2] && gameBoard[8] == gameBoard[2]) ||
-                (gameBoard[5] != '.' && gameBoard[4] == gameBoard[5] && gameBoard[3] == gameBoard[5]) ||
-                (gameBoard[8] != '.' && gameBoard[7] == gameBoard[8] && gameBoard[6] == gameBoard[8]);
+        return  (gameBoard[0][0] != '.' && gameBoard[0][1] == gameBoard[0][0] && gameBoard[0][2] == gameBoard[0][0]) ||
+                (gameBoard[1][0] != '.' && gameBoard[1][1] == gameBoard[1][0] && gameBoard[1][2] == gameBoard[1][0]) ||
+                (gameBoard[2][0] != '.' && gameBoard[2][1] == gameBoard[2][0] && gameBoard[2][2] == gameBoard[2][0]) ||
+                (gameBoard[0][0] != '.' && gameBoard[1][0] == gameBoard[0][0] && gameBoard[2][0] == gameBoard[0][0]) ||
+                (gameBoard[0][1] != '.' && gameBoard[1][1] == gameBoard[0][1] && gameBoard[2][1] == gameBoard[0][1]) ||
+                (gameBoard[0][2] != '.' && gameBoard[2][1] == gameBoard[0][2] && gameBoard[2][2] == gameBoard[0][2]) ||
+                (gameBoard[0][0] != '.' && gameBoard[1][1] == gameBoard[0][0] && gameBoard[2][2] == gameBoard[0][0]) ||
+                (gameBoard[0][2] != '.' && gameBoard[1][1] == gameBoard[0][2] && gameBoard[2][0] == gameBoard[0][2]);
     }
 
-    public char[] getGameBoard() {
+    public char[][] getGameBoard() {
         return gameBoard;
     }
 
-    public void setGameBoard(char[] board) {
+    public void setGameBoard(char[][] board) {
         gameBoard = board;
     }
 
     public String printBoard() {
         StringBuffer sb = new StringBuffer();
 
-        int j = 0;
-        for (int i = 0; i < gameBoard.length; i++)
+        for (int i = 0; i < 3; i++)
         {
-            sb.append(gameBoard[i]);
-            j++;
-            if (j == 3 && i != gameBoard.length - 1) {
-                sb.append('|');
-                j = 0;
+            for (int j = 0; j < 3; j++) {
+                sb.append(gameBoard[i][j]);
             }
+            if (i < 2)
+                sb.append('|');
         }
         return sb.toString();
     }

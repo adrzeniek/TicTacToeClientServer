@@ -11,19 +11,19 @@ class TicTacToeGameTest {
 
     @org.junit.jupiter.api.Test
     void testIfIsGameBoardFull() {
-        game.setGameBoard(new char[] {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'});
+        game.setGameBoard(new char[][] { {'X', 'X', 'X'},{'X', 'X', 'X'}, {'X', 'X', 'X'}});
         assertTrue(game.isGameBoardFull());
 
-        game.setGameBoard(new char[] {'X', 'X', 'X', 'X', 'X', 'X', 'X', '.', 'X'});
+        game.setGameBoard(new char[][] { {'X', 'X', 'X'},{'X', 'X', 'X'}, {'X', 'X', '.'}});
         assertFalse(game.isGameBoardFull());
     }
 
     @org.junit.jupiter.api.Test
     void testIfIsGameBoardContainsWinningSequence() {
-        game.setGameBoard(new char[] { 'X', 'X', 'X', '.', '.', '.', '.', '.', '.'});
+        game.setGameBoard(new char[][] { {'X', 'X', 'X'},{'.', '.', '.'}, {'.', '.', '.'}});
         assertTrue(game.isGameBoardContainsWinningSequence());
 
-        game.setGameBoard(new char[] { 'X', 'X', 'O', '.', '.', '.', '.', '.', '.'});
+        game.setGameBoard(new char[][] { {'X', 'X', 'O'},{'.', '.', '.'}, {'.', '.', '.'}});
         assertFalse(game.isGameBoardContainsWinningSequence());
     }
 
@@ -38,16 +38,16 @@ class TicTacToeGameTest {
 
     @org.junit.jupiter.api.Test
     void testIfIsMoveAllowed() {
-        game.setGameBoard(new char[] { 'X', 'X', 'X', '.', '.', '.', '.', '.', '.'});
+        game.setGameBoard(new char[][] { {'X', 'X', '.'},{'.', '.', '.'}, {'.', '.', '.'}});
 
         IPlayer p = null;
         p = new TicTacToePlayer('X');
         game.setCurrentPlayer(p);
         assertNotNull(p);
-        assertFalse(game.isMoveAllowed(2, p));
-        assertTrue(game.isMoveAllowed(3, p));
-        assertFalse(game.isMoveAllowed(-1, p));
-        assertFalse(game.isMoveAllowed(game.getGameBoard().length + 22, p));
+        assertFalse(game.isMoveAllowed( 1, 1, p));
+        assertTrue(game.isMoveAllowed(1, 3, p));
+        assertFalse(game.isMoveAllowed(1, -1, p));
+        assertFalse(game.isMoveAllowed( 4, 1, p));
     }
 
 }

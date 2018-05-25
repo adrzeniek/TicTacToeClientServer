@@ -9,12 +9,12 @@ public class ClientView {
         input = new Scanner(System.in);
     }
 
-    public void printOpponentMoved(int opponentLocation) {
-        System.out.println(String.format("Opponent moved to location %d", opponentLocation));
+    public void printOpponentMoved(String loc) {
+        System.out.println(String.format("Opponent moved to location %s", loc));
     }
 
     public void printBeginGame() {
-        System.out.println("You are beginning the game. Provide location [0 - 8]");
+        System.out.println("You are beginning the game. Provide location [A-C][1-3] eg. A2");
     }
 
     public void printGameBoard(String gameBoard) {
@@ -22,8 +22,8 @@ public class ClientView {
         System.out.println(s);
     }
 
-    public int readLocation() {
-        return input.nextInt();
+    public String readLocation() {
+        return input.next();
     }
 
     public void printMoveNotAllowed()

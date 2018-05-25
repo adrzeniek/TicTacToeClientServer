@@ -48,9 +48,10 @@ public class TicTacToePlayer extends Thread implements IPlayer {
             while ((inputLine = input.readLine()) != null) {
                 if (Common.commandEqual(inputLine, TicTacToeCommands.Move)) {
 
-                    int location = getLocationFromCommand(inputLine);
+                    int[] rowCol = getLocationFromCommand(inputLine);
 
-                    if (game.movePlayerToLocation(this, location)) {
+                    if (game.movePlayerToLocation(this, rowCol[0], rowCol[1])) {
+
                         printBoardCommand();
 
                         if (((TicTacToeGame)game).isGameBoardContainsWinningSequence()) {
@@ -87,9 +88,10 @@ public class TicTacToePlayer extends Thread implements IPlayer {
     }
 
     @Override
-    public void opponentMoved(int location) {
+    public void opponentMoved(int row, int col) {
         if (game instanceof TicTacToeGame) {
-            output.println(TicTacToeCommands.PlayerMoved.toString() + " " + location);
+            output.println(String.format("%s %c%d",
+                    TicTacToeCommands.PlayerMoved.toString(), ((TicTacToeGame)game).translateRowInt(row), col));
 
             if (((TicTacToeGame) game).isGameBoardContainsWinningSequence()) {
                 output.println(TicTacToeCommands.Defeated.toString());
@@ -109,10 +111,19 @@ public class TicTacToePlayer extends Thread implements IPlayer {
      * @return Location value.
      * @throws UnsupportedOperationException When command dont have location value.
      */
-    public int getLocationFromCommand(String command) throws UnsupportedOperationException {
+    public int[] getLocationFromCommand(String command) throws UnsupportedOperationException {
+        int[] rowCol = new int[2];
         if (command.contains(TicTacToeCommands.Move.toString())) {
-            return Integer.parseInt(command
-                    .substring(TicTacToeCommands.Move.toString().length() + 1));
+            char colChar = command
+                    .substring(TicTacToeCommands.Move.toString().length() + 1,
+                    TicTacToeCommands.Move.toString().length() + 2).charAt(0);
+            int row = Integer.parseInt(command
+                    .substring(TicTacToeCommands.Move.toString().length() + 2,
+                            TicTacToeCommands.Move.toString().length() + 3));
+            rowCol[0] = ((TicTacToeGame)(game)).translateRowChar(colChar);
+            rowCol[1] = row;
+
+            return rowCol;
         }
         else throw new UnsupportedOperationException("Expected Move command");
     }

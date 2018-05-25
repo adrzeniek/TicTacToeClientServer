@@ -20,8 +20,9 @@ public interface IPlayer {
 
     /**
      * Method used to take action when opponent player has moved to location.
-     * @param location Location where opponent player has moved.
+     * @param row Row where opponent player has moved.
+     * @param col Col where opponent player has moved.
      */
-    void opponentMoved(int location);
+    void opponentMoved(int row, int col);
 
 }
