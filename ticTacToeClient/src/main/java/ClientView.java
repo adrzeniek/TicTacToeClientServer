@@ -18,8 +18,13 @@ public class ClientView {
     }
 
     public void printGameBoard(String gameBoard) {
-        String s = gameBoard.replace('|', '\n');
-        System.out.println(s);
+
+        StringBuffer sb = new StringBuffer().append("  123").append('\n');
+        sb.append("A ").append(gameBoard.substring(0,3)).append('\n');
+        sb.append("B ").append(gameBoard.substring(4,7)).append('\n');
+        sb.append("C ").append(gameBoard.substring(8,11)).append('\n');
+
+        System.out.println(sb.toString());
     }
 
     public String readLocation() {
